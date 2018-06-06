@@ -14,7 +14,7 @@ router.get('/', (req, res, next) => {
   let filter = {};
 
   if (searchTerm) {
-    filter.title = { $regex: searchTerm, $options: 'i'};
+    filter.title = { $regex: searchTerm, $options: 'i' };
 
     // Mini-Challenge: Search both `title` and `content`
     // const re = new RegExp(searchTerm, 'i');
