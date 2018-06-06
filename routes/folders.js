@@ -1,15 +1,16 @@
 'use strict';
 
 const express = require('express');
-const router = express.Router();
-
 const mongoose = require('mongoose');
 
 const Folder = require('../models/folder');
 const Note = require('../models/note');
 
+const router = express.Router();
+
 /* ========== GET/READ ALL ITEMS ========== */
 router.get('/', (req, res, next) => {
+
   Folder.find()
     .sort('name')
     .then(results => {
@@ -75,14 +76,14 @@ router.put('/:id', (req, res, next) => {
   const { name } = req.body;
 
   /***** Never trust users - validate input *****/
-  if (!name) {
-    const err = new Error('Missing `name` in request body');
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    const err = new Error('The `id` is not valid');
+  if (!name) {
+    const err = new Error('Missing `name` in request body');
     err.status = 400;
     return next(err);
   }
@@ -110,14 +111,21 @@ router.put('/:id', (req, res, next) => {
 router.delete('/:id', (req, res, next) => {
   const { id } = req.params;
 
+  /***** Never trust users - validate input *****/
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    const err = new Error('The `id` is not valid');
+    err.status = 400;
+    return next(err);
+  }
+
   // ON DELETE SET NULL equivalent
-  const folderRemovePromise = Folder.findByIdAndRemove({ _id: id });  // NOTE **underscore** _id
+  const folderRemovePromise = Folder.findByIdAndRemove( id );
   // ON DELETE CASCADE equivalent
   // const noteRemovePromise = Note.deleteMany({ folderId: id });
 
   const noteRemovePromise = Note.updateMany(
     { folderId: id },
-    { '$unset': { 'folderId': '' } }
+    { $unset: { folderId: '' } }
   );
 
   Promise.all([folderRemovePromise, noteRemovePromise])
