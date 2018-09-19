@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 const app = require('../server');
 const { TEST_MONGODB_URI } = require('../config');
 
-const Note = require('../models/note');
+const Note = require('../models/note.model');
 
 const { notes } = require('../db/seed/notes');
 
@@ -300,7 +300,7 @@ describe('Noteful API - Notes', function () {
         })
         .then(function (res) {
           expect(res).to.have.status(204);
-          return Note.count({ _id: data.id });
+          return Note.countDocuments({ _id: data.id });
         })
         .then(count => {
           expect(count).to.equal(0);
