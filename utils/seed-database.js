@@ -5,16 +5,16 @@ const mongoose = require('mongoose');
 const { MONGODB_URI } = require('../config');
 const Note = require('../models/note');
 
-const seedNotes = require('../db/seed/notes');
+const { notes } = require('../db/seed/notes');
 
-mongoose.connect(MONGODB_URI)
+mongoose.connect(MONGODB_URI, { useNewUrlParser:true })
   .then(() => {
     console.info('Dropping Database');
     return mongoose.connection.db.dropDatabase();
   })
   .then(() => {
     console.info('Seeding Database');
-    return Note.insertMany(seedNotes);
+    return Note.insertMany(notes);
   })
   .then(() => {
     console.info('Disconnecting');
@@ -23,5 +23,4 @@ mongoose.connect(MONGODB_URI)
   .catch(err => {
     console.error(`ERROR: ${err.message}`);
     console.error(err);
-    db.disconnect();
   });
