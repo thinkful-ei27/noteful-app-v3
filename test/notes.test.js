@@ -9,7 +9,7 @@ const { TEST_MONGODB_URI } = require('../config');
 
 const Note = require('../models/note');
 
-const seedNotes = require('../db/seed/notes');
+const { notes } = require('../db/seed/notes');
 
 const expect = chai.expect;
 chai.use(chaiHttp);
@@ -22,7 +22,7 @@ describe('Noteful API - Notes', function () {
   });
 
   beforeEach(function () {
-    return Note.insertMany(seedNotes);
+    return Note.insertMany(notes);
   });
 
   afterEach(function () {
@@ -211,25 +211,29 @@ describe('Noteful API - Notes', function () {
         'title': 'What about dogs?!',
         'content': 'woof woof'
       };
-      let data;
+      let res, orig;
       return Note.findOne()
-        .then(_data => {
-          data = _data;
+        .then(_orig => {
+          orig = _orig;
           return chai.request(app)
-            .put(`/api/notes/${data.id}`)
+            .put(`/api/notes/${orig.id}`)
             .send(updateItem);
         })
-        .then(function (res) {
+        .then(function (_res) {
+          res = _res;
           expect(res).to.have.status(200);
           expect(res).to.be.json;
           expect(res.body).to.be.a('object');
           expect(res.body).to.have.all.keys('id', 'title', 'content', 'createdAt', 'updatedAt');
-          expect(res.body.id).to.equal(data.id);
-          expect(res.body.title).to.equal(updateItem.title);
-          expect(res.body.content).to.equal(updateItem.content);
+          return Note.findById(res.body.id);
+        })
+        .then( data => {
+          expect(res.body.title).to.equal(data.title);
+          expect(res.body.content).to.equal(data.content);
           expect(new Date(res.body.createdAt)).to.eql(data.createdAt);
+          expect(new Date(res.body.updatedAt)).to.eql(data.updatedAt);
           // expect note to have been updated
-          expect(new Date(res.body.updatedAt)).to.greaterThan(data.updatedAt);
+          expect(new Date(res.body.updatedAt)).to.greaterThan(orig.updatedAt);
         });
     });
 
