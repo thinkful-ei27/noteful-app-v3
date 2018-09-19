@@ -237,7 +237,6 @@ describe('Noteful API - Notes', function () {
         });
     });
 
-
     it('should respond with status 400 and an error message when `id` is not valid', function () {
       const updateItem = {
         'title': 'What about dogs?!',
@@ -310,3 +309,5 @@ describe('Noteful API - Notes', function () {
   });
 
 });
+
+
