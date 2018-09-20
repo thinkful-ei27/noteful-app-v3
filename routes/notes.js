@@ -14,11 +14,12 @@ router.get('/', (req, res, next) => {
   let filter = {};
 
   if (searchTerm) {
-    filter.title = { $regex: searchTerm, $options: 'i' };
+    // filter.title = { $regex: searchTerm, $options: 'i' };
+    filter.title = { $regex: 'Lady Gaga', $options: 'i' };
 
     // Mini-Challenge: Search both `title` and `content`
-    // const re = new RegExp(searchTerm, 'i');
-    // filter.$or = [{ 'title': re }, { 'content': re }];
+    const re = new RegExp('Lady Gaga', 'i');
+    filter.$or = [{ 'title': re }, { 'content': re }];
   }
 
   if (folderId) {
@@ -46,6 +47,7 @@ router.get('/:id', (req, res, next) => {
   }
 
   Note.findById(id)
+    .populate('folderId')
     .then(result => {
       if (result) {
         res.json(result);
@@ -111,7 +113,6 @@ router.put('/:id', (req, res, next) => {
     err.status = 400;
     return next(err);
   }
-
 
   const updateNote = { title, content, folderId };
 
