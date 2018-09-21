@@ -8,7 +8,7 @@ const app = require('../server');
 const { TEST_MONGODB_URI } = require('../config');
 
 const Folder = require('../models/folder');
-const seedFolders = require('../db/seed/folders');
+const {folders} = require('../db/seed/data');
 
 const expect = chai.expect;
 chai.use(chaiHttp);
@@ -16,13 +16,13 @@ chai.use(chaiHttp);
 describe('Noteful API - Folders', function () {
 
   before(function () {
-    return mongoose.connect(TEST_MONGODB_URI)
+    return mongoose.connect(TEST_MONGODB_URI, { useNewUrlParser: true })
       .then(() => mongoose.connection.db.dropDatabase());
   });
 
   beforeEach(function () {
     return Promise.all([
-      Folder.insertMany(seedFolders),
+      Folder.insertMany(folders),
       Folder.createIndexes()
     ]);
   });
@@ -261,7 +261,7 @@ describe('Noteful API - Folders', function () {
         .then(function (res) {
           expect(res).to.have.status(204);
           expect(res.body).to.be.empty;
-          return Folder.count({ _id: data.id });
+          return Folder.countDocuments({ _id: data.id });
         })
         .then(count => {
           expect(count).to.equal(0);

@@ -8,7 +8,7 @@ const app = require('../server');
 const { TEST_MONGODB_URI } = require('../config');
 
 const Tag = require('../models/tag');
-const seedTags = require('../db/seed/tags');
+const {tags} = require('../db/seed/data');
 
 const expect = chai.expect;
 chai.use(chaiHttp);
@@ -16,13 +16,13 @@ chai.use(chaiHttp);
 describe('Noteful API - Tags', function () {
 
   before(function () {
-    return mongoose.connect(TEST_MONGODB_URI)
+    return mongoose.connect(TEST_MONGODB_URI, { useNewUrlParser: true })
       .then(() => mongoose.connection.db.dropDatabase());
   });
 
   beforeEach(function () {
     return Promise.all([
-      Tag.insertMany(seedTags),
+      Tag.insertMany(tags),
       Tag.createIndexes()
     ]);
   });
@@ -269,7 +269,7 @@ describe('Noteful API - Tags', function () {
         .then(function (res) {
           expect(res).to.have.status(204);
           expect(res.body).to.be.empty;
-          return Tag.count({ _id: data.id });
+          return Tag.countDocuments({ _id: data.id });
         })
         .then(count => {
           expect(count).to.equal(0);

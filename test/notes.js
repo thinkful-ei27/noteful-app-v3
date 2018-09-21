@@ -11,28 +11,25 @@ const Note = require('../models/note');
 const Folder = require('../models/folder');
 const Tag = require('../models/tag');
 
-const seedNotes = require('../db/seed/notes');
-const seedFolders = require('../db/seed/folders');
-const seedTags = require('../db/seed/tags');
-
+const {folders, notes, tags} = require('../db/seed/data');
 const expect = chai.expect;
 chai.use(chaiHttp);
 
 describe('Noteful API - Notes', function () {
 
   before(function () {
-    return mongoose.connect(TEST_MONGODB_URI)
+    return mongoose.connect(TEST_MONGODB_URI, { useNewUrlParser: true })
       .then(() => mongoose.connection.db.dropDatabase());
   });
 
   beforeEach(function () {
     return Promise.all([
-      Note.insertMany(seedNotes),
+      Note.insertMany(notes),
 
-      Folder.insertMany(seedFolders),
+      Folder.insertMany(folders),
       Folder.createIndexes(),
 
-      Tag.insertMany(seedTags),
+      Tag.insertMany(tags),
       Tag.createIndexes()
     ]);
   });
@@ -327,7 +324,7 @@ describe('Noteful API - Notes', function () {
         })
         .then(function (res) {
           expect(res).to.have.status(204);
-          return Note.count({ _id: data.id });
+          return Note.countDocuments({ _id: data.id });
         })
         .then(count => {
           expect(count).to.equal(0);
