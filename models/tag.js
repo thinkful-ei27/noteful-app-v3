@@ -2,15 +2,15 @@
 
 const mongoose = require('mongoose');
 
-const tagSchema = new mongoose.Schema({
-  name: { type: String, unique: true, required: true }
+const schema = new mongoose.Schema({
+  name: { type: String, required: true, unique: true }
 });
 
 // Add `createdAt` and `updatedAt` fields
-tagSchema.set('timestamps', true);
+schema.set('timestamps', true);
 
-// Customize output for `res.json(data)`, `console.log(data)` etc.
-tagSchema.set('toObject', {
+// Transform output during `res.json(data)`, `console.log(data)` etc.
+schema.set('toObject', {
   virtuals: true,     // include built-in virtual `id`
   transform: (doc, result) => {
     delete result._id;
@@ -18,4 +18,4 @@ tagSchema.set('toObject', {
   }
 });
 
-module.exports = mongoose.model('Tag', tagSchema);
+module.exports = mongoose.model('Tag', schema);

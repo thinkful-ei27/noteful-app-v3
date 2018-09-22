@@ -10,7 +10,7 @@ const router = express.Router();
 
 /* ========== GET/READ ALL ITEMS ========== */
 router.get('/', (req, res, next) => {
-
+  
   Folder.find()
     .sort('name')
     .then(results => {
@@ -25,6 +25,7 @@ router.get('/', (req, res, next) => {
 router.get('/:id', (req, res, next) => {
   const { id } = req.params;
 
+  /***** Never trust users - validate input *****/
   if (!mongoose.Types.ObjectId.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
@@ -130,7 +131,7 @@ router.delete('/:id', (req, res, next) => {
 
   Promise.all([folderRemovePromise, noteRemovePromise])
     .then(() => {
-      res.status(204).end();
+      res.sendStatus(204);
     })
     .catch(err => {
       next(err);
