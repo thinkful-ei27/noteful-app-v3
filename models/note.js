@@ -11,7 +11,7 @@ const noteSchema = new mongoose.Schema({
 noteSchema.set('timestamps', true);
 
 // Customize output for `res.json(data)`, `console.log(data)` etc.
-noteSchema.set('toObject', {
+noteSchema.set('toJSON', {
   virtuals: true,     // include built-in virtual `id`
   transform: (doc, result) => {
     delete result._id;
