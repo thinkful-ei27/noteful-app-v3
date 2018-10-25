@@ -10,7 +10,7 @@ const folderSchema = new mongoose.Schema({
 folderSchema.set('timestamps', true);
 
 // Customize output for `res.json(data)`, `console.log(data)` etc.
-folderSchema.set('toObject', {
+folderSchema.set('toJSON', {
   virtuals: true,     // include built-in virtual `id`
   transform: (doc, result) => {
     delete result._id;
