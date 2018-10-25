@@ -28,7 +28,7 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true })
   .then(() => {
     console.info('Dropping Database');
     return mongoose.connection.db.dropDatabase();
-  })
+  });
 setTimeout(() => mongoose.disconnect(), 1000);
 
 /************************************************************/
