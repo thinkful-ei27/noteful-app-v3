@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const { MONGODB_URI } = require('../config');
 const Note = require('../models/note');
 
-const { notes } = require('../db/seed/notes');
+const { notes } = require('../db/data');
 
 mongoose.connect(MONGODB_URI, { useNewUrlParser:true })
   .then(() => {
