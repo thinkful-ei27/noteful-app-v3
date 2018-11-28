@@ -14,7 +14,6 @@ noteSchema.set('timestamps', true);
 noteSchema.set('toJSON', {
   virtuals: true,     // include built-in virtual `id`
   transform: (doc, result) => {
-    // result.id = doc._id;
     delete result._id;
     delete result.__v;
   }
