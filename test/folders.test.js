@@ -65,8 +65,8 @@ describe('Noteful API - Folders', function () {
             expect(item).to.have.all.keys('id', 'name', 'createdAt', 'updatedAt');
             expect(item.id).to.equal(data[i].id);
             expect(item.name).to.equal(data[i].name);
-            expect(new Date(item.createdAt)).to.eql(data[i].createdAt);
-            expect(new Date(item.updatedAt)).to.eql(data[i].updatedAt);
+            expect(new Date(item.createdAt)).to.deep.equal(data[i].createdAt);
+            expect(new Date(item.updatedAt)).to.deep.equal(data[i].updatedAt);
           });
         });
     });
@@ -89,8 +89,8 @@ describe('Noteful API - Folders', function () {
           expect(res.body).to.have.all.keys('id', 'name', 'createdAt', 'updatedAt');
           expect(res.body.id).to.equal(data.id);
           expect(res.body.name).to.equal(data.name);
-          expect(new Date(res.body.createdAt)).to.eql(data.createdAt);
-          expect(new Date(res.body.updatedAt)).to.eql(data.updatedAt);
+          expect(new Date(res.body.createdAt)).to.deep.equal(data.createdAt);
+          expect(new Date(res.body.updatedAt)).to.deep.equal(data.updatedAt);
         });
     });
 
@@ -134,8 +134,8 @@ describe('Noteful API - Folders', function () {
         .then(data => {
           expect(body.id).to.equal(data.id);
           expect(body.name).to.equal(data.name);
-          expect(new Date(body.createdAt)).to.eql(data.createdAt);
-          expect(new Date(body.updatedAt)).to.eql(data.updatedAt);
+          expect(new Date(body.createdAt)).to.deep.equal(data.createdAt);
+          expect(new Date(body.updatedAt)).to.deep.equal(data.updatedAt);
         });
     });
 
@@ -185,7 +185,7 @@ describe('Noteful API - Folders', function () {
           expect(res.body).to.have.all.keys('id', 'name', 'createdAt', 'updatedAt');
           expect(res.body.id).to.equal(data.id);
           expect(res.body.name).to.equal(updateItem.name);
-          expect(new Date(res.body.createdAt)).to.eql(data.createdAt);
+          expect(new Date(res.body.createdAt)).to.deep.equal(data.createdAt);
           // expect item to have been updated
           expect(new Date(res.body.updatedAt)).to.greaterThan(data.updatedAt);
         });

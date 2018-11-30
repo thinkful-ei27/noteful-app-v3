@@ -14,12 +14,11 @@ router.get('/', (req, res, next) => {
   let filter = {};
 
   if (searchTerm) {
-    // filter.title = { $regex: searchTerm, $options: 'i' };
-    filter.title = { $regex: 'Lady Gaga', $options: 'i' };
+    filter.title = { $regex: searchTerm, $options: 'i' };
 
     // Mini-Challenge: Search both `title` and `content`
-    const re = new RegExp('Lady Gaga', 'i');
-    filter.$or = [{ 'title': re }, { 'content': re }];
+    // const re = new RegExp(searchTerm, 'i');
+    // filter.$or = [{ 'title': re }, { 'content': re }];
   }
 
   if (folderId) {
@@ -38,6 +37,7 @@ router.get('/', (req, res, next) => {
 
 /* ========== GET/READ A SINGLE ITEM ========== */
 router.get('/:id', (req, res, next) => {
+
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
