@@ -11,7 +11,7 @@ const Note = require('../models/note');
 const Folder = require('../models/folder');
 const Tag = require('../models/tag');
 
-const {folders, notes, tags} = require('../db/seed/data');
+const {folders, notes, tags} = require('../db/data');
 const expect = chai.expect;
 chai.use(chaiHttp);
 
@@ -95,7 +95,7 @@ describe('Noteful API - Notes', function () {
           expect(res).to.have.status(200);
           expect(res).to.be.json;
           expect(res.body).to.be.a('array');
-          expect(res.body).to.have.length(1);
+          expect(res.body).to.have.length(data.length);
           res.body.forEach(function (item, i) {
             expect(item).to.be.a('object');
             expect(item).to.include.all.keys('id', 'title', 'createdAt', 'updatedAt', 'tags'); // Note: folderId and content are optional
@@ -287,27 +287,6 @@ describe('Noteful API - Notes', function () {
         .send(updateItem)
         .then(res => {
           expect(res).to.have.status(404);
-        });
-    });
-
-    it('should return an error when missing "title" field', function () {
-      const updateItem = {
-        'content': 'woof woof'
-      };
-      let data;
-      return Note.findOne()
-        .then(_data => {
-          data = _data;
-
-          return chai.request(app)
-            .put(`/api/notes/${data.id}`)
-            .send(updateItem);
-        })
-        .then(res => {
-          expect(res).to.have.status(400);
-          expect(res).to.be.json;
-          expect(res.body).to.be.a('object');
-          expect(res.body.message).to.equal('Missing `title` in request body');
         });
     });
 

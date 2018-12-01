@@ -10,7 +10,7 @@ const router = express.Router();
 
 /* ========== GET/READ ALL ITEMS ========== */
 router.get('/', (req, res, next) => {
-  
+
   Folder.find()
     .sort('name')
     .then(results => {
@@ -120,7 +120,7 @@ router.delete('/:id', (req, res, next) => {
   }
 
   // ON DELETE SET NULL equivalent
-  const folderRemovePromise = Folder.findByIdAndRemove( id );
+  const folderRemovePromise = Folder.findByIdAndRemove(id);
   // ON DELETE CASCADE equivalent
   // const noteRemovePromise = Note.deleteMany({ folderId: id });
 
