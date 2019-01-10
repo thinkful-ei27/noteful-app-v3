@@ -7,7 +7,6 @@ const Note = require('../models/note');
 
 const { notes } = require('../db/data');
 
-console.info('Connecting to:', MONGODB_URI);
 mongoose.connect(MONGODB_URI, { useNewUrlParser:true })
   .then(() => {
     console.info('Dropping Database');
