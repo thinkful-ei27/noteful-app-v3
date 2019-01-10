@@ -23,7 +23,6 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true })
     ]);
   })
   .then(results => {
-    console.log(results);
     console.info('Disconnecting');
     return mongoose.disconnect();
   })
