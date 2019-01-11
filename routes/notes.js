@@ -138,7 +138,7 @@ router.put('/:id', (req, res, next) => {
     }
   }
 
-  const updateNote = { title, content, folderId };
+  const updateNote = { title, content, folderId, tags };
 
   if (folderId === '') {
     delete updateNote.folderId;
